@@ -1,48 +1,119 @@
 /* =====================================================================
    1. CONFIGURAÇÕES DOS GRÁFICOS (APEXCHARTS) E EXPORTAÇÃO
 ===================================================================== */
+/* =====================================================================
+   2. CONFIGURAÇÕES DOS GRÁFICOS (APEXCHARTS) 
+===================================================================== */
 window.Apex = {
   chart: { foreColor: "#ccc", toolbar: { show: false } },
-  stroke: { width: 3 },
-  dataLabels: { enabled: false },
-  tooltip: { theme: "dark" },
+  stroke: { width: 3 }, dataLabels: { enabled: false }, tooltip: { theme: "dark" },
   grid: { borderColor: "#535A6C", xaxis: { lines: { show: true } } },
 };
 
-const sparklineConfig = {
-  type: "line", height: 80,
-  sparkline: { enabled: true },
-  dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 },
+const sparklineConfig = { type: "line", height: 80, sparkline: { enabled: true }, dropShadow: { enabled: true, top: 1, left: 1, blur: 2, opacity: 0.2 } };
+
+// TOOLTIP DOS GRÁFICOS PEQUENOS (Evita repetição de "Na época" e "gols")
+const commonSparkOptions = { 
+  stroke: { curve: "smooth" }, 
+  markers: { size: 0 }, 
+  grid: { padding: { top: 20, bottom: 10, left: 110 } }, 
+  colors: ["#fff"], 
+  xaxis: { crosshairs: { width: 1 } }, 
+  tooltip: { 
+    theme: "dark",
+    fixed: { enabled: false },
+    x: { show: false }, 
+    y: { 
+      title: { formatter: function() { return "Gols:"; } },
+      formatter: function(val) { return val + " gols"; } 
+    },
+    marker: { show: false } // Tira a bolinha colorida que não faz falta aqui
+  } 
 };
 
-const commonSparkOptions = {
-  stroke: { curve: "smooth" }, markers: { size: 0 },
-  grid: { padding: { top: 20, bottom: 10, left: 110 } },
-  colors: ["#fff"], xaxis: { crosshairs: { width: 1 } },
-  tooltip: { x: { show: false }, y: { title: { formatter: () => "" } } }
-};
+// ARRAYS COM A SOMA EXATA E NOME DEFINIDO PARA EVITAR BUGS
+const spark1 = { chart: { id: "spark1", group: "sparks", ...sparklineConfig }, series: [{ name: "CR7", data: [6, 9, 12, 23, 42, 26, 24, 3] }], ...commonSparkOptions }; 
+const spark2 = { chart: { id: "spark2", group: "sparks", ...sparklineConfig }, series: [{ name: "CR7", data: [33, 53, 60, 55, 51, 61, 51, 42, 45] }], ...commonSparkOptions }; 
+const spark3 = { chart: { id: "spark3", group: "sparks", ...sparklineConfig }, series: [{ name: "CR7", data: [28, 37, 36] }], ...commonSparkOptions }; 
+const spark4 = { chart: { id: "spark4", group: "sparks", ...sparklineConfig }, series: [{ name: "CR7", data: [7, 2, 12, 5, 5, 4, 7, 5, 10, 5, 3, 13, 11, 6, 14, 3, 7, 7, 10, 7] }], ...commonSparkOptions }; 
+const spark5 = { chart: { id: "spark5", group: "sparks", ...sparklineConfig }, series: [{ name: "CR7", data: [52, 35, 34, 26 ] }], ...commonSparkOptions }; 
 
-const spark1 = { chart: { id: "spark1", group: "sparks", ...sparklineConfig }, series: [{ data: [6, 9, 12, 23, 42, 26, 12, 24] }], ...commonSparkOptions };
-const spark2 = { chart: { id: "spark2", group: "sparks", ...sparklineConfig }, series: [{ data: [33, 53, 60, 55, 51, 61, 51, 42, 44] }], ...commonSparkOptions };
-const spark3 = { chart: { id: "spark3", group: "sparks", ...sparklineConfig }, series: [{ data: [28, 37, 36] }], ...commonSparkOptions };
-const spark4 = { chart: { id: "spark4", group: "sparks", ...sparklineConfig }, series: [{ data: [7, 2, 6, 5, 1, 1, 7, 5, 10, 5, 3, 13, 11, 6, 14, 3, 7, 7, 10, 5] }], ...commonSparkOptions };
-const spark5 = { chart: { id: "spark5", group: "sparks", ...sparklineConfig }, series: [{ data: [14, 54, 45, 15] }], ...commonSparkOptions };
-
+// GRÁFICO PRINCIPAL (LINHAS)
+// GRÁFICO PRINCIPAL (LINHAS)
 const optionsLine = {
-  chart: { height: 328, type: "line", zoom: { enabled: false }, dropShadow: { enabled: true, top: 3, left: 2, blur: 4, opacity: 1 } },
+  chart: { height: 350, type: "line", zoom: { enabled: false }, dropShadow: { enabled: true, top: 3, left: 2, blur: 4, opacity: 1 } },
   stroke: { curve: "smooth", width: 2 },
-  colors: ["#00ff40", "#ff0040"],
+  colors: ["#00ff40", "#ff0000"],
   series: [
     { name: "Gols", data: [5, 1, 13, 15, 25, 34, 35, 30, 48, 60, 63, 69, 61, 57, 55, 53, 49, 39, 44, 45, 16, 54, 50, 45, 15] },
     { name: "Assistências", data: [4, 2, 14, 11, 10, 11, 12, 5, 18, 18, 13, 15, 20, 17, 16, 12, 13, 4, 7, 6, 4, 15, 13, 10, 4] },
   ],
   title: { text: "Contribuições de Gol (Ano Calendário)", align: "left", offsetY: 25, offsetX: 20 },
-  subtitle: { text: "Estatísticas Oficiais", offsetY: 55, offsetX: 20 },
   markers: { size: 6, strokeWidth: 0, hover: { size: 9 } },
   grid: { show: true, padding: { bottom: 0 } },
-  labels: ["2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"],
-  xaxis: { tooltip: { enabled: false } },
-  legend: { position: "top", horizontalAlign: "right", offsetY: -20 },
+  
+  xaxis: {
+    categories: ["2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"],
+    tooltip: { enabled: false }
+  },
+  
+  tooltip: {
+    theme: "dark",
+    shared: true,
+    intersect: false,
+    x: {
+      show: true,
+      formatter: function(val, opts) {
+        // SOLUÇÃO À PROVA DE FALHAS:
+        // Usamos a lista exata de anos e cruzamos com o índice que o rato está a apontar
+        const anos = ["2002", "2003", "2004", "2005", "2006", "2007", "2008", "2009", "2010", "2011", "2012", "2013", "2014", "2015", "2016", "2017", "2018", "2019", "2020", "2021", "2022", "2023", "2024", "2025", "2026"];
+        const anoAtual = anos[opts.dataPointIndex];
+        
+        const clubs = {
+          "2002": "Sporting CP",
+          "2003": "Sporting / Man. United",
+          "2004": "Manchester United",
+          "2005": "Manchester United",
+          "2006": "Manchester United",
+          "2007": "Manchester United",
+          "2008": "Manchester United",
+          "2009": "Man. United / Real Madrid",
+          "2010": "Real Madrid",
+          "2011": "Real Madrid",
+          "2012": "Real Madrid",
+          "2013": "Real Madrid",
+          "2014": "Real Madrid",
+          "2015": "Real Madrid",
+          "2016": "Real Madrid",
+          "2017": "Real Madrid",
+          "2018": "Real Madrid / Juventus",
+          "2019": "Juventus",
+          "2020": "Juventus",
+          "2021": "Juventus / Man. United",
+          "2022": "Manchester United",
+          "2023": "Al Nassr",
+          "2024": "Al Nassr",
+          "2025": "Al Nassr",
+          "2026": "Al Nassr"
+        };
+        
+        return anoAtual + " ➔ " + (clubs[anoAtual] || "");
+      }
+    },
+    y: {
+      formatter: function (val) { return val; }
+    }
+  },
+  
+  responsive: [{
+    breakpoint: 768, 
+    options: {
+      chart: { height: 400 },
+      legend: { position: 'bottom', offsetY: 0 },
+      title: { style: { fontSize: '13px' }, offsetY: 10 },
+      xaxis: { labels: { rotate: -45, style: { fontSize: '9px' } } }
+    }
+  }]
 };
 
 /* =====================================================================
